@@ -243,6 +243,9 @@ local function prepare_prefix(kong_config, nginx_custom_template_path)
     kong_config.ssl_cert_key = kong_config.ssl_cert_key_default
   end
 
+  if not kong_config.ssl_client_ca then
+    kong_config.ssl_client_ca = kong_config.ssl_client_ca_default
+
   -- check ulimit
   local ulimit, err = get_ulimit()
   if not ulimit then return nil, err

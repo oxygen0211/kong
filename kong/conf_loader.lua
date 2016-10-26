@@ -32,7 +32,8 @@ local PREFIX_PATHS = {
   ;
   ssl_cert_default = {"ssl", "kong-default.crt"},
   ssl_cert_key_default = {"ssl", "kong-default.key"},
-  ssl_cert_csr_default = {"ssl", "kong-default.csr"}
+  ssl_cert_csr_default = {"ssl", "kong-default.csr"},
+  ssl_client_ca_default = {"ssl", ""}
 }
 
 -- By default, all properties in the configuration are considered to
@@ -182,6 +183,9 @@ local function check_and_infer(conf)
     end
     if conf.ssl_cert_key and not pl_path.exists(conf.ssl_cert_key) then
       errors[#errors+1] = "ssl_cert_key: no such file at "..conf.ssl_cert_key
+    end
+    if conf.ssl_client_ca and not pl_path.exists(conf.ssl_client_ca)then
+      errors[#errors+1] = "ssl_client_ca: no such file at "..conf.ssl_client_ca
     end
   end
 
@@ -373,6 +377,9 @@ local function load(path, custom_conf)
     conf.ssl_cert_key = pl_path.abspath(conf.ssl_cert_key)
   end
 
+  if conf.ssl_client_ca then
+    conf.ssl_client_ca = pl_path.abspath(conf.ssl_client_ca)
+  end
   -- attach prefix files paths
   for property, t_path in pairs(PREFIX_PATHS) do
     conf[property] = pl_path.join(conf.prefix, unpack(t_path))

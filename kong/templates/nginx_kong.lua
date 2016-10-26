@@ -70,6 +70,10 @@ server {
     ssl_certificate_by_lua_block {
         kong.ssl_certificate()
     }
+> if ssl_client_ca then
+  ssl_client_certificate 	${{SSL_CLIENT_CA}};
+  ssl_verify_client optional;
+> end
 > end
 
     location / {
@@ -84,6 +88,11 @@ server {
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
         proxy_set_header Host $upstream_host;
+
+> if ssl_client_ca then
+        proxy_set_header X-Forwarded-Client-Cert-Verified $ssl_client_verify;
+> end
+
         proxy_pass_header Server;
         proxy_pass $upstream_url;
 

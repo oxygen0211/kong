@@ -91,6 +91,11 @@
                                  # the SSL key for the `proxy_listen_ssl`
                                  # address.
 
+#ssl_client_ca =                 # If set, optional SSL client authentication
+                                 # will be enabled. Authentication result will
+                                 # be added to the request on HTTP Header
+                                 # 'X-Forwarded-Client-Cert-Verified'
+
 #------------------------------------------------------------------------------
 # DATASTORE
 #------------------------------------------------------------------------------
